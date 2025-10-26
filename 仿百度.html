@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>基础搜索框</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 50px;
+            background-color: #f5f5f5;
+        }
+        
+        .title {
+            text-align: center;
+            font-size: 36px;
+            font-weight: bold;
+            color: #3388ff;
+            margin-bottom: 30px;
+        }
+        
+        .search-container {
+            width: 400px;
+            margin: 0 auto;
+            position: relative;
+        }
+        
+        .search-input {
+            width: 100%;
+            padding: 12px;
+            font-size: 16px;
+            border: 2px solid #3388ff;
+            border-radius: 5px;
+            outline: none;
+        }
+        
+        .suggestions-box {
+            width: 100%;
+            background: white;
+            border: 1px solid #ddd;
+            border-top: none;
+            position: absolute;
+            top: 100%;
+            left: 0;
+            display: none;
+        }
+        
+        .suggestion-item {
+            padding: 10px;
+            cursor: pointer;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .suggestion-item:hover {
+            background-color: #f0f0f0;
+        }
+    </style>
+</head>
+<body>
+    <div class="title">仿百度搜索框</div>
+    
+    <div class="search-container">
+        <input type="text" class="search-input" id="searchInput" placeholder="请输入搜索内容">
+        <div class="suggestions-box" id="suggestionsBox"></div>
+    </div>
+
+    <script>
+        var searchData = [
+            "百度官网",
+            "百度地图", 
+            "百度网盘",
+            "百度贴吧",
+            "学习编程",
+            "学习方法",
+            "学习英语",
+            "如何减肥",
+            "如何学习",
+            "天气预报",
+            "今日新闻"
+        ];
+
+        var searchInput = document.getElementById('searchInput');
+        var suggestionsBox = document.getElementById('suggestionsBox');
+
+        searchInput.addEventListener('input', function() {
+            var userInput = this.value;
+            
+            if (userInput === '') {
+                suggestionsBox.style.display = 'none';
+                return;
+            }
+            
+            var results = [];
+            for (var i = 0; i < searchData.length; i++) {
+                if (searchData[i].includes(userInput)) {
+                    results.push(searchData[i]);
+                }
+            }
+            
+            showSuggestions(results);
+        });
+
+        function showSuggestions(suggestions) {
+            suggestionsBox.innerHTML = '';
+            
+            if (suggestions.length === 0) {
+                suggestionsBox.style.display = 'none';
+                return;
+            }
+            
+            for (var i = 0; i < suggestions.length; i++) {
+                var item = document.createElement('div');
+                item.className = 'suggestion-item';
+                item.textContent = suggestions[i];
+                
+                item.addEventListener('click', function() {
+                    searchInput.value = this.textContent;
+                    suggestionsBox.style.display = 'none';
+                });
+                
+                suggestionsBox.appendChild(item);
+            }
+            
+            suggestionsBox.style.display = 'block';
+        }
+
+        document.addEventListener('click', function(event) {
+            if (event.target !== searchInput) {
+                suggestionsBox.style.display = 'none';
+            }
+        });
+    </script>
+</body>
+</html>
